@@ -1,71 +1,71 @@
 # Urban Kicks
 
-A simple PHP sneaker e-commerce demo site with SQLite storage, user authentication, shopping cart, and purchase history.
+简单的 PHP 球鞋电商演示网站，使用 SQLite 存储用户、购物车和购买记录。
 
-## Tech Stack
+## 技术栈
 
-| Layer | Technology |
-|-------|-----------|
-| Language | PHP 8+ (procedural, no framework) |
-| Database | SQLite via PDO (WAL mode, foreign keys) |
-| Frontend | HTML + CSS (no JavaScript) |
-| Auth | Session-based with bcrypt password hashing |
+| 层级 | 技术 |
+|------|------|
+| 后端 | PHP 8+（面向过程，无框架） |
+| 数据库 | SQLite，通过 PDO 操作（WAL 模式，外键约束） |
+| 前端 | HTML + CSS（无 JavaScript） |
+| 认证 | Session + bcrypt 密码哈希 |
 
-## Project Structure
+## 文件结构
 
 ```
-├── style.css            # Global stylesheet
-├── init.php             # Session init (30-day cookie)
-├── db.php               # SQLite connection + schema + seed data
-├── nav.php              # Navigation bar component
-├── index.php            # Home page with product listing + search
-├── product.php          # Product detail page
-├── gallery.php          # Product gallery (database-driven)
-├── login.php            # Login form
-├── verify.php           # Login verification + guest cart merge
-├── logout.php           # Logout
-├── register.php         # Registration form
-├── process_register.php # Registration validation + account creation
-├── cart.php             # Shopping cart + checkout + purchase history
-├── add_to_cart.php      # Add to cart (guest + logged-in users)
+├── style.css            # 统一样式表
+├── init.php             # Session 初始化（30天持久化）
+├── db.php               # SQLite 数据库连接 + 建表 + 初始数据
+├── nav.php              # 导航栏组件（含登录状态）
+├── index.php            # 首页（商品列表 + 搜索）
+├── product.php          # 商品详情页
+├── gallery.php          # 商品画廊（数据库驱动）
+├── login.php            # 登录页
+├── verify.php           # 登录验证 + 游客购物车合并
+├── logout.php           # 退出登录
+├── register.php         # 注册页
+├── process_register.php # 注册验证 + 创建账号
+├── cart.php             # 购物车 + 结算 + 购买记录
+├── add_to_cart.php      # 加入购物车（游客 + 已登录用户）
 └── data/
-    └── store.db         # SQLite database (auto-created)
+    └── store.db         # SQLite 数据库（自动创建）
 ```
 
-## Features
+## 功能
 
-| Feature | Description |
-|---------|-------------|
-| User Registration | Form validation, duplicate check, bcrypt password hashing |
-| User Login/Logout | Session-based auth with 30-day persistence |
-| Product Listing | Dynamic from database, with search/filter |
-| Product Detail | Full product page with image, description, stock status |
-| Shopping Cart | DB-backed for logged-in users, session-backed for guests |
-| Guest Cart Merge | Guest items merge into user cart on login |
-| Checkout | Cart items converted to purchases, stock decremented |
-| Purchase History | Order history with product details and timestamps |
-| Stock Management | Real-time stock tracking, out-of-stock prevention |
-| Gallery | Database-driven product gallery |
+| 功能 | 说明 |
+|------|------|
+| 用户注册 | 表单验证、用户名和邮箱查重、bcrypt 密码哈希 |
+| 用户登录/退出 | Session 认证，30天持久化 |
+| 商品展示 | 数据库动态加载，支持搜索过滤 |
+| 商品详情 | 大图、描述、库存状态 |
+| 购物车 | 已登录用户存入数据库，游客存入 Session |
+| 游客合并 | 登录后自动将游客购物车合并到账号 |
+| 结算 | 购物车商品一键转为购买记录，自动扣库存 |
+| 购买记录 | 查看历史订单，包含商品信息和时间戳 |
+| 库存管理 | 实时库存追踪，库存不足时禁止加购 |
+| 画廊 | 数据库驱动的商品画廊 |
 
-## Getting Started
+## 快速启动
 
 ```bash
 php -S localhost:8080
 ```
 
-Then visit http://localhost:8080
+浏览器访问 http://localhost:8080
 
-## Test Accounts
+## 测试账号
 
-| Username | Password |
-|----------|----------|
+| 用户名 | 密码 |
+|--------|------|
 | admin | admin123 |
 | user | user123 |
 
-## Security Notes
+## 安全说明
 
-- Passwords are hashed with bcrypt
-- CSRF protection on cart actions
-- SQL injection prevention via PDO prepared statements
-- XSS prevention via htmlspecialchars() on output
-- This is a demo project — not production-hardened
+- 密码使用 bcrypt 哈希存储
+- 购物车操作有 CSRF 防护
+- 使用 PDO 预处理语句防止 SQL 注入
+- 输出使用 htmlspecialchars() 防止 XSS
+- 本项目仅为演示用途，未经生产环境加固
