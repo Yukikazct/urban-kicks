@@ -19,8 +19,15 @@ function init_db(): void {
         username TEXT UNIQUE NOT NULL,
         password TEXT NOT NULL,
         email TEXT,
+        role TEXT NOT NULL DEFAULT \'user\',
         created_at DATETIME DEFAULT CURRENT_TIMESTAMP
     )');
+
+    // Add role column to existing DB if missing (migration)
+    $cols = $db->query('PRAGMA table_info(users)')->fetchAll(PDO::FETCH_COLUMN, 1);
+    if (!in_array('role', $cols)) {
+        $db->exec('ALTER TABLE users ADD COLUMN role TEXT NOT NULL DEFAULT \'user\'');
+    }
 
     $db->exec('CREATE TABLE IF NOT EXISTS products (
         id INTEGER PRIMARY KEY AUTOINCREMENT,
@@ -56,9 +63,9 @@ function init_db(): void {
     // Seed default users (only if table is empty)
     $count = $db->query('SELECT COUNT(*) FROM users')->fetchColumn();
     if ($count == 0) {
-        $stmt = $db->prepare('INSERT INTO users (username, password, email) VALUES (?, ?, ?)');
-        $stmt->execute(['admin', password_hash('admin123', PASSWORD_BCRYPT), 'admin@urbankicks.com']);
-        $stmt->execute(['user',  password_hash('user123',  PASSWORD_BCRYPT), 'user@urbankicks.com']);
+        $stmt = $db->prepare('INSERT INTO users (username, password, email, role) VALUES (?, ?, ?, ?)');
+        $stmt->execute(['admin', password_hash('admin123', PASSWORD_BCRYPT), 'admin@urbankicks.com', 'admin']);
+        $stmt->execute(['user',  password_hash('user123',  PASSWORD_BCRYPT), 'user@urbankicks.com', 'user']);
     }
 
     // Seed default products (only if table is empty)

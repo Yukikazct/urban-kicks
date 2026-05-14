@@ -18,7 +18,7 @@ if ($username === '' || $password === '') {
 }
 
 $db = get_db();
-$stmt = $db->prepare('SELECT password FROM users WHERE username = ?');
+$stmt = $db->prepare('SELECT password, role FROM users WHERE username = ?');
 $stmt->execute([$username]);
 $row = $stmt->fetch(PDO::FETCH_ASSOC);
 
@@ -29,6 +29,7 @@ if (!$row || !password_verify($password, $row['password'])) {
 }
 
 $_SESSION['username'] = $username;
+$_SESSION['role'] = $row['role'];
 
 // Merge guest cart into user's DB cart
 if (!empty($_SESSION['cart'])) {

@@ -60,8 +60,8 @@ if ($stmt->fetch()) {
 // Create account with hashed password
 try {
     $hashed = password_hash($password, PASSWORD_BCRYPT);
-    $stmt = $db->prepare('INSERT INTO users (username, password, email) VALUES (?, ?, ?)');
-    $stmt->execute([$username, $hashed, $email]);
+    $stmt = $db->prepare('INSERT INTO users (username, password, email, role) VALUES (?, ?, ?, ?)');
+    $stmt->execute([$username, $hashed, $email, 'user']);
 
     $_SESSION['username'] = $username;
     $_SESSION['success'] = 'Account created successfully!';
